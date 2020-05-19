@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import Movie from './components/movie';
+import data from './components/data';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    query: ''
+  }
+
+  searchText = (event) => {
+    this.setState({
+      query: event.target.value
+    })
+  }
+
+  render() {
+
+    let name = [];
+
+    Object.keys(data).forEach(key => {
+      name.push(data[key].title);
+
+    })
+
+    let newName = name.filter((movie) => {
+      return movie.toLowerCase().indexOf(this.state.query) !== -1;
+    })
+
+    console.log(name);
+
+    return (
+      <div className="container">
+        <div className="input-container">
+          <label>Search for a Movie</label>
+          <input type="text" onKeyUp={this.searchText} />
+        </div>
+
+        <div className="movies-container">
+
+          {
+            newName.map((movie, i) => {
+              return <Movie name={movie} title={newName[i]}  key={i} />
+            })
+          }
+
+        </div>
+
+
+      </div>
+    );
+  }
 }
 
 export default App;
